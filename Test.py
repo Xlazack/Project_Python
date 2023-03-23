@@ -1,3 +1,1 @@
 print("ihiuhu")
-
-print("Pisze")
