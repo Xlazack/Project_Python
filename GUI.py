@@ -1,65 +1,105 @@
-import PySimpleGUI as sg
+"""import tkinter as tk
+from tkinter import filedialog
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# Funkcja rysująca wykres liniowy
-def line_plot(x, y, xlabel, ylabel):
-    plt.plot(x, y)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.show()
+class CSVPlotter(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.master.title("CSV Plotter")
+        self.pack()
 
-sg.theme('DefaultNoMoreNagging')  # Ustawienie motywu
+        self.filepath = ""
+        self.data = None
 
-# Definicja layoutu okna
-layout = [
-    [sg.Text("Cześć, jestem programem badającym ruch przy pomocy analizy EMG!")],
-    [sg.Text('Wybierz plik do wgrania w fomracie .csv:')],
-    [sg.Input(), sg.FileBrowse()],
-    [sg.Button('Wgraj'), sg.Button('Anuluj')],
-]
+        # create widgets
+        self.choose_file_btn = tk.Button(self, text="WGRAJ PLIK W FORMACIE .csv", command=self.choose_file)
+        self.choose_file_btn.pack()
 
-window = sg.Window('ANALIZA EMG', layout)
+        self.plot_btn = tk.Button(self, text="GENERUJ WYKRES", command=self.plot)
+        self.plot_btn.pack()
 
-while True:
-    event, values = window.read()
-    if event == sg.WINDOW_CLOSED or event == 'Anuluj':
-        break
-    if event == 'Wgraj':
-        filename = values[0]
-        try:
-            df = pd.read_csv(filename)
-        except:
-            sg.popup_error('Błąd odczytu pliku')
-            continue
-        sg.popup('Plik został wczytany', f'Liczba wierszy: {len(df)}', title='PLIK WGRANY PRAWIDŁOWO')
+    def choose_file(self):
+        self.filepath = filedialog.askopenfilename()
 
-        # Rysowanie wykresów
-        plt.close('all')
-        fig1, ax1 = plt.subplots()
-        line_plot(df['a'], df['b'], 'a', 'b')
-        fig2, ax2 = plt.subplots()
-        line_plot(df['a'], df['c'], 'a', 'c')
-        fig3, ax3 = plt.subplots()
-        line_plot(df['a'], df['d'], 'a', 'd')
-        fig4, ax4 = plt.subplots()
-        line_plot(df['a'], df['e'], 'a', 'e')
+    def plot(self):
+        if self.filepath:
+            self.data = pd.read_csv(self.filepath)
 
-        plt.plot(df['A'], df['B'])
-        plt.xlabel('A')
-        plt.ylabel('B')
-        plt.title('Wykres liniowy kolumny B od kolumny A')
-        plt.show()
+            fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
 
-        # Wyświetlenie okien z wykresami
-        sg.popup('Wykres kolumny b od a', title='Wykres 1', location=(0, 0), keep_on_top=True)
-        plt.show(block=False, fig=fig1)
-        sg.popup('Wykres kolumny c od a', title='Wykres 2', location=(0, 100), keep_on_top=True)
-        plt.show(block=False, fig=fig2)
-        sg.popup('Wykres kolumny d od a', title='Wykres 3', location=(0, 200), keep_on_top=True)
-        plt.show(block=False, fig=fig3)
-        sg.popup('Wykres kolumny e od a', title='Wykres 4', location=(0, 300), keep_on_top=True)
-        plt.show(block=False, fig=fig4)
+            axs[0, 0].plot(self.data.iloc[:, 0], self.data.iloc[:, 1])
+            axs[0, 0].set_title("ZGINACZ NADGARSTKA OD CZASU")
 
-window.close()
+            axs[0, 1].plot(self.data.iloc[:, 0], self.data.iloc[:, 2])
+            axs[0, 1].set_title("BICEPS OD CZASU")
 
+            axs[1, 0].plot(self.data.iloc[:, 0], self.data.iloc[:, 3])
+            axs[1, 0].set_title("PROSTOWNIK NADGARSTKA OD CZASU")
+
+            axs[1, 1].plot(self.data.iloc[:, 0], self.data.iloc[:, 4])
+            axs[1, 1].set_title("TRICEPS OD CZASU")
+
+            canvas = FigureCanvasTkAgg(fig, master=self.master)
+            canvas.draw()
+            canvas.get_tk_widget().pack()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = CSVPlotter(master=root)
+    app.mainloop()
+"""
+
+import tkinter as tk
+from tkinter import filedialog
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+class CSVPlotter(tk.Frame):
+    def __init__(self, master=None):
+        super().__init__(master)
+        self.master = master
+        self.master.title("CSV Plotter")
+        self.pack()
+
+        self.filepath = ""
+        self.data = None
+
+        # create widgets
+        self.choose_file_btn = tk.Button(self, text="WGRAJ PLIK W FORMACIE .csv", command=self.choose_file)
+        self.choose_file_btn.pack()
+
+        self.plot_btn = tk.Button(self, text="GENERUJ WYKRES", command=self.plot)
+        self.plot_btn.pack()
+
+    def choose_file(self):
+        self.filepath = filedialog.askopenfilename()
+
+    def plot(self):
+        if self.filepath:
+            self.data = pd.read_csv(self.filepath)
+
+            fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
+
+            axs[0, 0].plot(self.data.iloc[:, 0], self.data.iloc[:, 1])
+            axs[0, 0].set_title("ZGINACZ NADGARSTKA OD CZASU")
+
+            axs[0, 1].plot(self.data.iloc[:, 0], self.data.iloc[:, 2])
+            axs[0, 1].set_title("BICEPS OD CZASU")
+
+            axs[1, 0].plot(self.data.iloc[:, 0], self.data.iloc[:, 3])
+            axs[1, 0].set_title("PROSTOWNIK NADGARSTKA OD CZASU")
+
+            axs[1, 1].plot(self.data.iloc[:, 0], self.data.iloc[:, 4])
+            axs[1, 1].set_title("TRICEPS OD CZASU")
+
+            canvas = FigureCanvasTkAgg(fig, master=self.master)
+            canvas.get_tk_widget().pack()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = CSVPlotter(master=root)
+    app.mainloop()
