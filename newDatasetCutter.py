@@ -2,14 +2,14 @@ import pandas as pd
 import os
 
 # Wczytaj plik and Zamień na wielki dataset
-df = pd.read_csv('Zgiecie nadgarstka.csv', sep=';', skiprows=4, decimal=',')#, low_memory=False)
+df = pd.read_csv('fullFiles/Maciek/Stak lokciowy wyprost, nadgarstkowy wyprost.csv', sep=';', skiprows=4, decimal=',')#, low_memory=False)
 df = df.drop('Time,s', axis=1)
 # Ustal ścieżkę, gdzie pliki będą zapisywane
 outDir = "./dir"
 if not os.path.exists(outDir):
     os.mkdir(outDir)
 # Deklaracja Tresholda
-treshold = 15
+treshold = 12
 # Deklaracja flagi i pastFlagi
 pastFlag = False
 flag = False
