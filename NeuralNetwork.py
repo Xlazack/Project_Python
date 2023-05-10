@@ -26,7 +26,7 @@ for i, folder in enumerate(signal_folders):
     for file_name in file_names:
         file_path = os.path.join(folder, file_name)
         df = pd.read_csv(file_path, delimiter=";", decimal=",", header=None)
-        df = df.iloc[:, 1:] # remove the index column
+        df = df.iloc[1:, 1:] # remove the index column and Titles of columns
         signal = df.values.reshape(-1)
         data.append(signal)
         labels.append(i)
