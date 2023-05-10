@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Wczytaj plik and Zamień na wielki dataset
-df = pd.read_csv('fullFiles/Maciek/Stak lokciowy wyprost, nadgarstkowy wyprost.csv', sep=';', skiprows=4, decimal=',')#, low_memory=False)
+df = pd.read_csv('fullFiles/Michal/prostowanie nadgarstka.csv', sep=';', skiprows=4, decimal=',')#, low_memory=False)
 df = df.drop('Time,s', axis=1)
 # Ustal ścieżkę, gdzie pliki będą zapisywane
 outDir = "./dir"
