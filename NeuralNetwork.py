@@ -6,7 +6,7 @@ from keras.layers import Dense, Dropout
 from keras.optimizers import SGD
 
 # Define the input shape of the data
-input_shape = (4,) # 4 channels
+input_shape = (6004,) # 4 channels
 
 # Define the number of possible classes
 num_classes = 8 # 8 signal shapes
@@ -16,7 +16,7 @@ batch_size = 32
 epochs = 100
 
 # Define the path to the folders containing the signal files
-signal_folders = ["TF/1", "TF/2", "TF/3", "TF/4", "TF/5", "TF/6", "TF/7", "TF/8"]
+signal_folders = ["NTF/1", "NTF/2", "NTF/3", "NTF/4", "NTF/5", "NTF/6", "NTF/7", "NTF/8"]
 
 # Load the data into memory
 data = []
@@ -61,7 +61,7 @@ model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 
 # Compile the model
-sgd = SGD(lr=0.01, momentum=0.9, decay=1e-6, nesterov=True)
+sgd = SGD(learning_rate=0.01, momentum=0.9, decay=1e-6, nesterov=True)
 model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
 # Train the model
@@ -73,10 +73,13 @@ print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
 # Use the model to predict new data
-new_data = pd.read_csv("TestF/2/24.csv", delimiter=";", decimal=",", header=None)
-new_data = new_data.iloc[:, 1:] # remove the index column
+new_data = pd.read_csv("NTF/8/50.csv", delimiter=";", decimal=",", header=None)
+new_data = new_data.iloc[1:, 1:] # remove the index column
 new_signal = new_data.values.reshape(-1)
 new_signal = new_signal.astype('float32')
 new_signal /= 100 # normalize the data
 new_signal = np.array([new_signal])
 prediction = model.predict(new_signal)
+predicted_class = np.argmax(prediction)
+print('Predicted class:', predicted_class + 1)
+print('Predictions:', prediction)
