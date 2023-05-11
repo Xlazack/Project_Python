@@ -28,20 +28,21 @@ class CSVPlotter(tk.Frame):
 
     def plot(self):
         if self.filepath:
-            self.data = pd.read_csv(self.filepath)
+            self.data = pd.read_csv(self.filepath, delimiter=";", decimal=",", header=None)
+            self.data = self.data.drop(0).astype('float32')
 
             fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
 
-            axs[0, 0].plot(self.data.iloc[:, 1], self.data.iloc[:, 1])
+            axs[0, 0].plot(self.data.iloc[:,0], self.data.iloc[:,1])
             axs[0, 0].set_title("ZGINACZ NADGARSTKA OD CZASU")
 
-            axs[0, 1].plot(self.data.iloc[:, 1], self.data.iloc[:, 2])
+            axs[0, 1].plot(self.data.iloc[:, 0], self.data.iloc[:, 2])
             axs[0, 1].set_title("BICEPS OD CZASU")
 
-            axs[1, 0].plot(self.data.iloc[:, 1], self.data.iloc[:, 3])
+            axs[1, 0].plot(self.data.iloc[:, 0], self.data.iloc[:, 3])
             axs[1, 0].set_title("PROSTOWNIK NADGARSTKA OD CZASU")
 
-            axs[1, 1].plot(self.data.iloc[:, 1], self.data.iloc[:, 4])
+            axs[1, 1].plot(self.data.iloc[:, 0], self.data.iloc[:, 4])
             axs[1, 1].set_title("TRICEPS OD CZASU")
 
             canvas = FigureCanvasTkAgg(fig, master=self.master)

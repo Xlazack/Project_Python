@@ -26,7 +26,7 @@ for i, folder in enumerate(signal_folders):
     for file_name in file_names:
         file_path = os.path.join(folder, file_name)
         df = pd.read_csv(file_path, delimiter=";", decimal=",", header=None)
-        df = df.iloc[1:, 1:] # remove the index column and Titles of columns
+        df = df.iloc[1:, 1:] # remove the index column and headers
         signal = df.values.reshape(-1)
         data.append(signal)
         labels.append(i)
@@ -73,8 +73,8 @@ print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 
 # Use the model to predict new data
-new_data = pd.read_csv("NTF/8/50.csv", delimiter=";", decimal=",", header=None)
-new_data = new_data.iloc[1:, 1:] # remove the index column
+new_data = pd.read_csv("NTF/3/20.csv", delimiter=";", decimal=",", header=None)
+new_data = new_data.iloc[1:, 1:] # remove the index column and headers
 new_signal = new_data.values.reshape(-1)
 new_signal = new_signal.astype('float32')
 new_signal /= 100 # normalize the data
