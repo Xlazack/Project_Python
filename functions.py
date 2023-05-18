@@ -41,7 +41,7 @@ def loadFiles(num_classes: int = 8, signal_folders = ["NTF/1", "NTF/2", "NTF/3",
     y_test = np.eye(num_classes)[y_test]
 
 
-def createNN(input_shape: int = 6004, num_classes: int = 8, batch_size: int = 32, epochs: int = 100):
+def createNN(input_shape = (6004,), num_classes: int = 8, batch_size: int = 32, epochs: int = 100):
     # Define the neural network model
     global model
     model = Sequential()
