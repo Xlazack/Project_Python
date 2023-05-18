@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
+import tensorflow as tf
 from keras.optimizers import SGD
 def loadFiles(num_classes: int = 8, signal_folders = ["NTF/1", "NTF/2", "NTF/3", "NTF/4", "NTF/5", "NTF/6", "NTF/7", "NTF/8"]):
     # Load the data into memory
@@ -52,7 +53,8 @@ def createNN(input_shape = (6004,), num_classes: int = 8, batch_size: int = 32, 
     model.add(Dense(num_classes, activation='softmax'))
 
     # Compile the model
-    sgd = SGD(learning_rate=0.01, momentum=0.9, decay=1e-6, nesterov=True)
+    sgd = tf.keras.optimizers.legacy.SGD(learning_rate=0.01, momentum=0.9, decay=1e-6, nesterov=True)
+
     model.compile(loss='categorical_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
     # Train the model
@@ -71,7 +73,9 @@ def useModel(pathfile: str):
     new_signal = new_signal.astype('float32')
     new_signal /= 100  # normalize the data
     new_signal = np.array([new_signal])
+    global predicted_class
     prediction = model.predict(new_signal)
     predicted_class = np.argmax(prediction)
     print('Predicted class:', predicted_class + 1)
     print('Predictions:', prediction)
+    return predicted_class+1

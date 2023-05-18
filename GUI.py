@@ -1,23 +1,25 @@
 import tkinter as tk
 from tkinter import filedialog
 import pandas as pd
-import matplotlib
-matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import Image, ImageTk
+from functions import loadFiles
+from functions import createNN
+from functions import useModel
 
-class CSVPlotter(tk.Frame):
-    def __init__(self, master=None):
-        super().__init__(master)
-        self.master = master
-        self.master.title("CSV Plotter")
-        self.pack()
+
+class CSVPlotter(tk.Tk):
+    def __init__(self):
+        super().__init__()
+        self.title("CSV Plotter")
 
         self.filepath = ""
         self.data = None
 
-        # create widgets
+        self.prepare_nn_btn = tk.Button(self, text="PRZYGOTUJ SIEC NEURONOWA", command=self.prepare_neural_network)
+        self.prepare_nn_btn.pack()
+
         self.choose_file_btn = tk.Button(self, text="WGRAJ PLIK W FORMACIE .csv", command=self.choose_file)
         self.choose_file_btn.pack()
 
@@ -26,6 +28,9 @@ class CSVPlotter(tk.Frame):
 
         self.image_label = tk.Label(self)
         self.image_label.pack()
+    def prepare_neural_network(self):
+        loadFiles()
+        createNN()
 
     def choose_file(self):
         self.filepath = filedialog.askopenfilename()
@@ -59,19 +64,36 @@ class CSVPlotter(tk.Frame):
 
             fig.tight_layout()
 
-            canvas = FigureCanvasTkAgg(fig, master=self.master)
+            canvas = FigureCanvasTkAgg(fig, master=self)
+            canvas.draw()
             canvas.get_tk_widget().pack()
 
             # Load and display image
-            image_path = "Zgiecie_lokiec.jpg"  # Replace with the actual image file path
+            x = useModel(self.filepath)
+            print (x)
+            if  x == 1:
+                image_path = "Zgiecie_nadgarstka.jpg"
+            elif x == 2:
+                image_path = "Wyprost_nadgarstka.jpg"
+            elif x == 3:
+                image_path = "Zgiecie_lokcia.jpg"
+            elif x == 4:
+                image_path = "Wyprost_lokcia.jpg"
+            elif x == 5:
+                image_path = "combo13.jpg"
+            elif x == 6:
+                image_path = "combo14.jpg"
+            elif x == 7:
+                image_path = "combo23.jpg"
+            elif x == 8:
+                image_path = "combo24.jpg"
+            else : print ("error")
             image = Image.open(image_path)
-            image.thumbnail((300, 300))  # Adjust the size of the thumbnail as needed
+            image.thumbnail((200, 200))  # Adjust the size of the thumbnail as needed
             photo = ImageTk.PhotoImage(image)
             self.image_label.configure(image=photo)
             self.image_label.image = photo
 
-            plt.show()
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = CSVPlotter(master=root)
+    app = CSVPlotter()
     app.mainloop()
