@@ -7,6 +7,10 @@ from PIL import Image, ImageTk
 from functions import loadFiles
 from functions import createNN
 from functions import useModel
+from functions import inspectLoadedFile
+from evenNewerDatasetCutter import datasetCutter
+import os
+import shutil
 
 
 class CSVPlotter(tk.Tk):
@@ -28,13 +32,52 @@ class CSVPlotter(tk.Tk):
 
         self.image_label = tk.Label(self)
         self.image_label.pack()
+
+        self.upload_full_file_btn = tk.Button(self, text="Wczytaj pelny plik", command=self.upload_full_file)
+        self.upload_full_file_btn.pack()
+
+        self.check_full_file_btn = tk.Button(self, text="Sprawdz pelny plik", command=self.check_full_file)
+        self.check_full_file_btn.pack()
+
+        self.show_full_file_btn = tk.Button(self, text="Pokaz podzielony plik", command=self.show_full_file)
+        self.show_full_file_btn.pack()
     def prepare_neural_network(self):
         loadFiles()
         createNN()
+    def upload_full_file(self):
+        self.otherFilepath = filedialog.askopenfilename()
+        datasetCutter(self.otherFilepath)
 
+    def check_full_file(self):
+        global data
+        data = inspectLoadedFile("./dir")
     def choose_file(self):
         self.filepath = filedialog.askopenfilename()
 
+    def show_full_file(self):
+        for index,category in data:
+            if  category == 1:
+                image_path = "Zgiecie_nadgarstka.jpg"
+            elif category == 2:
+                image_path = "Wyprost_nadgarstka.jpg"
+            elif category == 3:
+                image_path = "Zgiecie_lokcia.jpg"
+            elif category == 4:
+                image_path = "Wyprost_lokcia.jpg"
+            elif category == 5:
+                image_path = "combo13.jpg"
+            elif category == 6:
+                image_path = "combo14.jpg"
+            elif category == 7:
+                image_path = "combo23.jpg"
+            elif category == 8:
+                image_path = "combo24.jpg"
+            else : print ("error")
+            image = Image.open(image_path)
+            image.thumbnail((200, 200))  # Adjust the size of the thumbnail as needed
+            photo = ImageTk.PhotoImage(image)
+            self.image_label.configure(image=photo)
+            self.image_label.image = photo
     def plot(self):
         if self.filepath:
             self.data = pd.read_csv(self.filepath, delimiter=";", decimal=",", header=None)

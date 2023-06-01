@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 import tensorflow as tf
@@ -79,3 +80,12 @@ def useModel(pathfile: str):
     print('Predicted class:', predicted_class + 1)
     print('Predictions:', prediction)
     return predicted_class+1
+
+def inspectLoadedFile(dir: str):
+    file_names = os.listdir(dir)
+    checkedPairs = []
+    for file_name in file_names:
+        fullPath = dir + '/' + file_name
+        result = useModel(fullPath)
+        checkedPairs.append((fullPath, result))
+    return checkedPairs

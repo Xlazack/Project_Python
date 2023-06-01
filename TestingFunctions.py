@@ -23,6 +23,6 @@ signal_folders = ["NTF/1", "NTF/2", "NTF/3", "NTF/4", "NTF/5", "NTF/6", "NTF/7",
 
 loadFiles(num_classes, signal_folders)
 
-createNN(input_shape, num_classes)
+createNN(input_shape, num_classes, batch_size, epochs)
 
-useModel("NTF/3/20.csv")
+useModel("NTF/3/21.csv")
