@@ -94,6 +94,7 @@ class CSVPlotter(tk.Tk):
             self.image_label.configure(image=photo)
             self.image_label.image = photo
 
+
 if __name__ == "__main__":
     app = CSVPlotter()
     app.mainloop()
