@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -12,6 +13,8 @@ from evenNewerDatasetCutter import datasetCutter
 import os
 import shutil
 from keras.models import load_model
+
+
 
 
 class CSVPlotter(tk.Tk):
@@ -143,6 +146,8 @@ class CSVPlotter(tk.Tk):
             self.image_label.image = photo
 
 
+
 if __name__ == "__main__":
     app = CSVPlotter()
+    app.iconbitmap("ikona_emg.ico")
     app.mainloop()
