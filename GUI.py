@@ -11,6 +11,7 @@ from functions import inspectLoadedFile
 from evenNewerDatasetCutter import datasetCutter
 import os
 import shutil
+from keras.models import load_model
 
 
 class CSVPlotter(tk.Tk):
@@ -41,6 +42,8 @@ class CSVPlotter(tk.Tk):
 
         self.show_full_file_btn = tk.Button(self, text="Pokaz podzielony plik", command=self.show_full_file)
         self.show_full_file_btn.pack()
+
+
     def prepare_neural_network(self):
         loadFiles()
         createNN()
@@ -49,6 +52,8 @@ class CSVPlotter(tk.Tk):
         datasetCutter(self.otherFilepath)
 
     def check_full_file(self):
+        if os.path.exists('neural_network.h5'):
+            self.model = load_model('neural_network.h5')
         global data
         data = inspectLoadedFile("./dir")
     def choose_file(self):

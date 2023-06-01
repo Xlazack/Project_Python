@@ -5,6 +5,7 @@ import tensorflow as tf
 from keras.models import Sequential
 from keras.layers import Dense, Dropout
 import tensorflow as tf
+from keras.models import load_model
 from keras.optimizers import SGD
 def loadFiles(num_classes: int = 8, signal_folders = ["NTF/1", "NTF/2", "NTF/3", "NTF/4", "NTF/5", "NTF/6", "NTF/7", "NTF/8"]):
     # Load the data into memory
@@ -65,6 +66,9 @@ def createNN(input_shape = (6004,), num_classes: int = 8, batch_size: int = 32, 
     score = model.evaluate(x_test, y_test, verbose=0)
     print('Test loss:', score[0])
     print('Test accuracy:', score[1])
+
+    # Save model
+    model.save('neural_network.h5')
 
 def useModel(pathfile: str):
     # Use the model to predict new data
