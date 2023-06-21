@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 
 import pandas as pd
+import os
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import Image, ImageTk
@@ -64,6 +65,12 @@ class CSVPlotter(tk.Tk):
         for index, category in data:
             self.moves_listbox.insert(tk.END, f"Ruch {index}: {category}")  # Dodaj nowe elementy do listy
 
+    def get_file_number(self, file_tuple):
+        file_path = file_tuple[0]  # Zakładając, że ścieżka do pliku jest pierwszym elementem krotki
+        base_name = os.path.basename(file_path)
+        file_number = os.path.splitext(base_name)[0]
+        return int(file_number)
+
     def update_image(self, category):
         if category == 1:
             image_path = "Zgiecie_nadgarstka.jpg"
@@ -101,8 +108,9 @@ class CSVPlotter(tk.Tk):
             self.model = load_model('neural_network.h5')
         global data
         data = inspectLoadedFile("./dir")
-        self.moves = data  # Użyj self.moves zamiast data
-        self.show_full_file()  # Dodaj tę linijkę
+        self.moves = data
+        self.moves = sorted(self.moves, key=self.get_file_number)
+        self.show_full_file()
     def choose_file(self):
         self.filepath = filedialog.askopenfilename()
 
