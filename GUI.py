@@ -46,6 +46,50 @@ class CSVPlotter(tk.Tk):
         self.show_full_file_btn = tk.Button(self, text="Pokaz podzielony plik", command=self.show_full_file)
         self.show_full_file_btn.pack()
 
+        # dodaj listę wykrytych ruchów
+        self.moves_listbox = tk.Listbox(self)
+        self.moves_listbox.pack()
+        self.moves_listbox.bind('<<ListboxSelect>>', self.on_select_move)
+
+        self.moves = []
+
+    def on_select_move(self, evt):
+        # Zdarzenie kliknięcia na element listy
+        selected = self.moves_listbox.curselection()
+        if selected and self.moves:  # Sprawdź, czy coś jest zaznaczone na liście i czy self.moves nie jest puste
+            index = selected[0]
+            category = self.moves[index][1]  # Użyj self.moves zamiast self.data
+            self.update_image(category)
+
+    def show_full_file(self):
+        self.moves_listbox.delete(0, tk.END)  # Usuń stare elementy z listy
+        for index, category in data:
+            self.moves_listbox.insert(tk.END, f"Ruch {index}: {category}")  # Dodaj nowe elementy do listy
+
+    def update_image(self, category):
+        if category == 1:
+            image_path = "Zgiecie_nadgarstka.jpg"
+        elif category == 2:
+            image_path = "Wyprost_nadgarstka.jpg"
+        elif category == 3:
+            image_path = "Zgiecie_lokcia.jpg"
+        elif category == 4:
+            image_path = "Wyprost_lokcia.jpg"
+        elif category == 5:
+            image_path = "combo13.jpg"
+        elif category == 6:
+            image_path = "combo14.jpg"
+        elif category == 7:
+            image_path = "combo23.jpg"
+        elif category == 8:
+            image_path = "combo24.jpg"
+        else : print ("error")
+        # ... Twoje poprzednie definicje ...
+        image = Image.open(image_path)
+        image.thumbnail((200, 200))  # Adjust the size of the thumbnail as needed
+        photo = ImageTk.PhotoImage(image)
+        self.image_label.configure(image=photo)
+        self.image_label.image = photo
 
     def prepare_neural_network(self):
         loadFiles()
@@ -59,33 +103,41 @@ class CSVPlotter(tk.Tk):
             self.model = load_model('neural_network.h5')
         global data
         data = inspectLoadedFile("./dir")
+        self.moves = data  # Użyj self.moves zamiast data
+        self.show_full_file()  # Dodaj tę linijkę
     def choose_file(self):
         self.filepath = filedialog.askopenfilename()
 
+    # def show_full_file(self):
+    #     for index,category in data:
+    #         if  category == 1:
+    #             image_path = "Zgiecie_nadgarstka.jpg"
+    #         elif category == 2:
+    #             image_path = "Wyprost_nadgarstka.jpg"
+    #         elif category == 3:
+    #             image_path = "Zgiecie_lokcia.jpg"
+    #         elif category == 4:
+    #             image_path = "Wyprost_lokcia.jpg"
+    #         elif category == 5:
+    #             image_path = "combo13.jpg"
+    #         elif category == 6:
+    #             image_path = "combo14.jpg"
+    #         elif category == 7:
+    #             image_path = "combo23.jpg"
+    #         elif category == 8:
+    #             image_path = "combo24.jpg"
+    #         else : print ("error")
+    #         image = Image.open(image_path)
+    #         image.thumbnail((200, 200))  # Adjust the size of the thumbnail as needed
+    #         photo = ImageTk.PhotoImage(image)
+    #         self.image_label.configure(image=photo)
+    #         self.image_label.image = photo
+
     def show_full_file(self):
-        for index,category in data:
-            if  category == 1:
-                image_path = "Zgiecie_nadgarstka.jpg"
-            elif category == 2:
-                image_path = "Wyprost_nadgarstka.jpg"
-            elif category == 3:
-                image_path = "Zgiecie_lokcia.jpg"
-            elif category == 4:
-                image_path = "Wyprost_lokcia.jpg"
-            elif category == 5:
-                image_path = "combo13.jpg"
-            elif category == 6:
-                image_path = "combo14.jpg"
-            elif category == 7:
-                image_path = "combo23.jpg"
-            elif category == 8:
-                image_path = "combo24.jpg"
-            else : print ("error")
-            image = Image.open(image_path)
-            image.thumbnail((200, 200))  # Adjust the size of the thumbnail as needed
-            photo = ImageTk.PhotoImage(image)
-            self.image_label.configure(image=photo)
-            self.image_label.image = photo
+        self.moves_listbox.delete(0, tk.END)  # Usuń stare elementy z listy
+        for index, category in enumerate(data):  # Dodaj enumerate(), aby uzyskać indeks
+            self.moves_listbox.insert(tk.END, f"Ruch {index + 1}: {category}")  # Dodaj nowe elementy do listy
+
     def plot(self):
         if self.filepath:
             self.data = pd.read_csv(self.filepath, delimiter=";", decimal=",", header=None)
