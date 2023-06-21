@@ -15,8 +15,6 @@ import shutil
 from keras.models import load_model
 
 
-
-
 class CSVPlotter(tk.Tk):
     def __init__(self):
         super().__init__()
